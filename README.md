@@ -64,3 +64,8 @@ Funciones adicionales para:
 - rnaseq_preprocessing.yml
 - r_env_4.1.0.yml
 - rsem_1.3.0.yml
+
+### Instalación con Conda
+``` bash 
+conda env create -f rnaseq_preprocessing.yml
+conda activate rnaseq_preprocessing

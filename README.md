@@ -15,6 +15,8 @@ organizado en tres grandes bloques:
   │ ├── cutadapt_batch_pe.sh
   │ └── 03_Alig_Quant_RSEM_STAR_v4.sh
   │── Differential Expression Analysis/ # Script en R para análisis de expresión diferencial 
+  │ ├── Differential_Expression_Analysis_Limma_voom_v4.R
+  | ├── QC_Count_Matrix_RNAseq_v6.R
   │ └── full_rnaseq_automate_analysis_v4.R
   │── Downstream Analysis/ # Scripts en R para análisis biológico 
   │ ├── enrichment_overrepresentation.R 

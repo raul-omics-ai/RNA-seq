@@ -15,7 +15,7 @@ organizado en tres grandes bloques:
   │ ├── cutadapt_batch_pe.sh
   │ └── 03_Alig_Quant_RSEM_STAR_v4.sh
   │── Differential Expression Analysis/ # Script en R para análisis de expresión diferencial 
-  │ └── DESeq2_pipeline.R 
+  │ └── full_rnaseq_automate_analysis_v4.R
   │── Downstream Analysis/ # Scripts en R para análisis biológico 
   │ ├── enrichment_overrepresentation.R 
   │ ├── pathway_enrichment.R 
@@ -24,26 +24,30 @@ organizado en tres grandes bloques:
   ``` </pre>
 
 ---
-## Upstream Analysis
-
-En esta carpeta se encuentran los pasos para realizar el control de calidad (QC), filtrado de bases de baja calidad y recorte de adaptadores y mapeo de las secuencias dividido en 3 scripts. 
-
-También hay un script para descargar automáticamente archivos de secuenciación públicos desde el repositorio del Sequence Read Archive (SRA).
-
----
-## Differential Expression Analysis
-
-La función principal es `full_rnaseq_automate_analysis_v4.R` que realiza el control de calidad de las matriz de cuentas, la detección de muestras de baja calidad, el análisis de expresión diferencial (limma-voom y edgeR), así como todas las gráficas para comprobar las asunciones de los modelos.
-
-También están incorporadas las funciones para realizar el análisis de enriquecimiento.
+## 🔬 Upstream Analysis
+Incluye los pasos para:
+- Control de calidad (FastQC, MultiQC)  
+- Filtrado y recorte de adaptadores (fastp, cutadapt)  
+- Mapeo a genoma de referencia (RSEM + STAR)  
+- Descarga automática de datos públicos desde SRA  
 
 ---
-## Downstream Analysis
 
-En esta carpeta se encuentran todas las funciones sobre análisis de sobrerrepresentación (over-representation analysis, ORA), análisis de enriquecimiento de conjuntos de genes (gene set enrichment analysis, GSEA) y el análisis de impacto para tomar en cuenta la topología de la ruta de señalización (Signaling Pathway Impact Analysis, SPIA).
+## 📊 Differential Expression Analysis
+Script en R (`full_rnaseq_automate_analysis_v4.R`) que:
+- Evalúa calidad de la matriz de cuentas  
+- Detecta outliers y muestras problemáticas  
+- Corre análisis de expresión diferencial (edgeR, limma-voom)  
+- Genera todos los gráficos de diagnóstico y resultados tabulados  
+- Integra análisis de enriquecimiento  
 
-Todas estas funciones están implementadas dentro de la función principal `full_rnaeq_automate_analysis_v4.R` pero aquí se encuentran más organizadas.
+---
 
+## 🧩 Downstream Analysis
+Funciones adicionales para:
+- **Over-Representation Analysis (ORA)**  
+- **Gene Set Enrichment Analysis (GSEA)**  
+- **Signaling Pathway Impact Analysis (SPIA)** 
 ---
 
 ## 🚀 Cómo usar este repositorio

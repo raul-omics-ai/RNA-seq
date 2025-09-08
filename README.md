@@ -16,12 +16,14 @@ organizado en tres grandes bloques:
   │ └── 03_Alig_Quant_RSEM_STAR_v4.sh
   │── Differential Expression Analysis/ # Script en R para análisis de expresión diferencial 
   │ ├── Differential_Expression_Analysis_Limma_voom_v4.R
+  | ├── Differencial_Expression_Analysis_EdgeR_QL_v3.R
   | ├── QC_Count_Matrix_RNAseq_v6.R
   │ └── full_rnaseq_automate_analysis_v4.R
   │── Downstream Analysis/ # Scripts en R para análisis biológico 
-  │ ├── enrichment_overrepresentation.R 
-  │ ├── pathway_enrichment.R 
-  │ └── topology_based_enrichment.R 
+  │ ├── crear_kegg_database_V1.R
+  │ ├── enrichment_analysis_v4.R 
+  │ ├── volcano_gsea_v1.R
+  │ └── spia_topology_based_enrichment_analysis_V1.R 
   └── README.md 
   ``` </pre>
 

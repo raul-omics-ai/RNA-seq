@@ -127,11 +127,11 @@ enrichment_function <- function(dge_df,
                       pvalueCutoff  = 0.05,
                       qvalueCutoff  = 0.05,
                       readable      = TRUE)
-    ge.go@result$Description  <- ifelse(
-      nchar(ge.go@result$Description) > 47,  # Si la longitud original es mayor a 47
-      paste0(substr(ge.go@result$Description, 1, 47), "..."),  # Trunca y añade "..."
-      ge.go@result$Description  # Si no, deja el texto igual
-    )
+    #ge.go@result$Description  <- ifelse(
+    #  nchar(ge.go@result$Description) > 47,  # Si la longitud original es mayor a 47
+    #  paste0(substr(ge.go@result$Description, 1, 47), "..."),  # Trunca y añade "..."
+    #  ge.go@result$Description  # Si no, deja el texto igual
+    #)
     
     tab.ge.go <- as.data.frame(ge.go)
     tab.ge.go$Description <- ifelse(

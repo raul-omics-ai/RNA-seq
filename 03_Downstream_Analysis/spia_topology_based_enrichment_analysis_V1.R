@@ -23,7 +23,7 @@ SPIA_automatic_enrichment <- function(dea_dataframe,
                                       gene_column = "ENTREZID",
                                       where_to_save = NULL,
                                       title = "Topology_Based_Enrichment_Analysis",
-                                      organism = "mmu",
+                                      org = "mmu",
                                       significance = 0.05,
                                       kegg_db_path = NULL,
                                       new_pathway_txt = FALSE,
@@ -60,12 +60,12 @@ SPIA_automatic_enrichment <- function(dea_dataframe,
   
   if(keytype != "ENTREZID"){
     print_centered_note(paste0("Transforming ", keytype, "keytype to ENTREZID"))
-    if(organism == "mmu"){
+    if(org == "mmu"){
       print("Selected specie: Mus musculus")
       library(org.Mm.eg.db)
       org.db <- org.Mm.eg.db
     }
-    if(organism == "hsa"){
+    if(org == "hsa"){
       print("Selected specie: Homo sapiens")
       library(org.Hs.eg.db)
       org.db <- org.Hs.eg.db
@@ -95,7 +95,7 @@ SPIA_automatic_enrichment <- function(dea_dataframe,
   # 3. Call SPIA function
   spia_result <- spia(de=dea_logfc, 
                       all=background_entrez, 
-                      organism= organism, 
+                      organism= org, 
                       nB = 2000)
   
   print("Saving SPIA dataframe")
@@ -125,7 +125,7 @@ SPIA_automatic_enrichment <- function(dea_dataframe,
   
   tmp = sapply(spia_result[spia_result$pGFdr < threshold, "ID"], 
                function(pid) pathview (gene.data = dea_logfc, pathway.id = pid, 
-                                       species = organism, same.layer = F))
+                                       species = org, same.layer = F))
   
   setwd(wd)
   
@@ -137,8 +137,8 @@ SPIA_automatic_enrichment <- function(dea_dataframe,
     print_centered_note("Creating the new TXT for KEGG")
     source("~/Documentos/09_scripts_R/crear_kegg_database_V1.R")
     kegg_db <- procesar_kegg_pathways(path_txt = path_txt, 
-                                            output_csv = file.path(dataprocessed, paste0("02_Kegg_db_", organism, "_",Sys.Date(),".csv")),
-                                            organismo = organism)
+                                            output_csv = file.path(dataprocessed, paste0("02_Kegg_db_", org, "_",Sys.Date(),".csv")),
+                                            organismo = org)
     
     } else{
       print_centered_note("Loading CSV for KEGG pathways")
@@ -147,7 +147,7 @@ SPIA_automatic_enrichment <- function(dea_dataframe,
   
   # 2. Merge SPIA pathways with database to get all database genes
   spia_result_merge <- spia_result %>%
-    mutate(ID = paste0(organism, ID)) %>%
+    mutate(ID = paste0(org, ID)) %>%
     left_join(kegg_db,
               by=c("ID" = "ID"))
   save_dataframe(spia_result_merge, title = paste0("SPIA_Result_All_Genes", title), 
@@ -160,8 +160,9 @@ SPIA_automatic_enrichment <- function(dea_dataframe,
   spia_result_merge.short <- spia_result_merge %>%
     filter(pGFdr < threshold) %>%
     select(Name, ID, Pathway, SYMBOL)
-  
-  gene_lists <- spia_result_merge.short %>%
+
+  if(nrow(spia_result_merge.short) > 2){
+    gene_lists <- spia_result_merge.short %>%
     tidyr::separate_rows(SYMBOL, sep = ",\\s*") %>%  # Divide por coma y espacio
     group_by(Pathway) %>%
     summarise(Genes = list(unique(SYMBOL)))     # Lista única de genes por ruta
@@ -173,10 +174,10 @@ SPIA_automatic_enrichment <- function(dea_dataframe,
   inc_matrix <- sapply(gene_lists$Genes, function(gl) all_genes %in% gl) %>%
     t()
   colnames(inc_matrix) <- all_genes
-  if(organism == "mmu"){
+  if(org == "mmu"){
     rownames(inc_matrix) <- gsub(" - Mus musculus \\(house mouse\\)$", "",gene_lists$Pathway)
   }
-  if(organism == "hsa"){
+  if(org == "hsa"){
     rownames(inc_matrix) <- gsub(" - Homosapiens \\(human\\)$", "",gene_lists$Pathway)
   }
   inc_matrix <- as.data.frame(inc_matrix)
@@ -194,4 +195,6 @@ SPIA_automatic_enrichment <- function(dea_dataframe,
   dev.off()
   
   print_centered_note(toupper("End of the script"))
+  } else {print_centered_note(toupper("End of the script"))} #ifelse statement key
+  
 }# Key of the function

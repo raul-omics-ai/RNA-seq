@@ -1,10 +1,8 @@
 # 🧬 RNA-seq Analysis
 
-Este repositorio contiene un **pipeline completo para el análisis de datos RNA-seq**, 
-desde la preparación de las lecturas crudas hasta la interpretación biológica de los resultados y muchos gráficos chulos.  
+This repository contains a **complete pipeline for RNA-se data analysis**, from raw reads preparation to the biological interpretation of results and many cool plots.
 
-El objetivo es proporcionar un flujo **reproducible, automatizado y modular**, 
-organizado en tres grandes bloques:
+The goal is to provide a **reproducible, automated and modular** workflow, organized into three main blocks:
 
 <pre> ``` 
   RNA-seq-analysis/ 
@@ -22,6 +20,8 @@ organizado en tres grandes bloques:
   │ └── full_rnaseq_automate_analysis_v4.R
   |
   │── Downstream Analysis/ # Scripts en R para análisis biológico 
+  | ├── CIBERSORT.R
+  | ├── cibersort_automatic_function_V1.R
   │ ├── crear_kegg_database_V1.R
   │ ├── enrichment_analysis_v4.R 
   │ ├── volcano_gsea_v1.R
@@ -32,34 +32,35 @@ organizado en tres grandes bloques:
 
 ---
 ## 🔬 Upstream Analysis
-Incluye los pasos para:
-- Control de calidad (FastQC, MultiQC)  
-- Filtrado y recorte de adaptadores (fastp, cutadapt)  
-- Mapeo a genoma de referencia (RSEM + STAR)  
-- Descarga automática de datos públicos desde SRA  
+Includes steps for
+- Quality control (FastQC, MultiQC)  
+- Adapter trimming and filtering (fastp, cutadapt)  
+- Mapping to a reference genome (RSEM + STAR)  
+- BONUS: Automatic download of public data from SRA (fasterq-dump)  
 
 ---
 
 ## 📊 Differential Expression Analysis
-Script en R (`full_rnaseq_automate_analysis_v4.R`) que:
-- Evalúa calidad de la matriz de cuentas  
-- Detecta outliers y muestras problemáticas  
-- Corre análisis de expresión diferencial (edgeR, limma-voom)  
-- Genera todos los gráficos de diagnóstico y resultados tabulados  
-- Integra análisis de enriquecimiento  
+R Script (`full_rnaseq_automate_analysis_v4.R`) that:
+- Evaluates count matrix quality  
+- Detects outliers and problematic samples  
+- Runs differential expression analysis (edgeR, limma-voom)  
+- Generates all diagnostic plots and tabulated results  
+- Integrates enrichment analysis  
 
 ---
 
 ## 🧩 Downstream Analysis
-Funciones adicionales para:
+Additional functions for:
 - **Over-Representation Analysis (ORA)**  
 - **Gene Set Enrichment Analysis (GSEA)**  
-- **Signaling Pathway Impact Analysis (SPIA)** 
+- **Signaling Pathway Impact Analysis (SPIA)**
+- **Immune profile for bulk RNA-seq with CIBERSORT**
 ---
 
-## 🚀 Cómo usar este repositorio
+## 🚀 How to use this repository
 
-### Requisitos
+### Requirements
 - **Bash** (v5+)
 - **R** (4.1)
 
@@ -68,7 +69,7 @@ Funciones adicionales para:
 - r_env_4.1.0.yml
 - rsem_1.3.0.yml
 
-### Instalación con Conda
+### Installation with Conda
 ``` bash 
 conda env create -f rnaseq_preprocessing.yml
 conda activate rnaseq_preprocessing

@@ -35,6 +35,7 @@ SPIA_automatic_enrichment <- function(dea_dataframe,
   source("~/Documentos/09_scripts_R/print_centered_note_v1.R")
   source("~/Documentos/09_scripts_R/Automate_Saving_ggplots.R")
   source("~/Documentos/09_scripts_R/create_sequential_dir.R")
+  source("~/Documentos/09_scripts_R/automate_saving_dataframes_xlsx_format.R")
   print_centered_note('LOADING PACKAGES ')
   list_of_packages = c("openxlsx", "edgeR", "dplyr", "AnnotationDbi", "clusterProfiler",
                        "patchwork", "ggplot2", "tidyr", "SPIA", "pathview", "vegan",

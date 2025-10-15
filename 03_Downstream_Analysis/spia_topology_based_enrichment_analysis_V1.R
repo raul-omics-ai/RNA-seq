@@ -1,22 +1,77 @@
 ########## 27/05/2025 ##########
-
-
-# ============================================================================ #
-# ==== AUTOMATE IMPACT ANALYSIS FOR TOPOLOGICAL-BASED ENRICHMENT ANALYSIS ==== #
-# ============================================================================ #
-
-# En este script voy a crear una funció para poder realizar un análisis de impacto que implica
-# la topología de las rutas de KEGG para hacer un análisis de enriquecimiento funcional.
-
-# Este análisis toma la suposición de independencia de las vías, es decir, supone que los genes
-# solamente se encuentran presentes un una única vía, lo cual no es cierto, por lo que se
-# podría inflar el p-valor de muchas rutas que comparten una gran cantida de genes y están
-# muy correlacionadas.
-
-# Para solventar este problema, lo que hace este script es utilizar el índice de Jaccard para
-# identificar qué vías están más correlacionadas porque tengan la presencia de los mismos genes
-# y se realizar un clusterin jerárquico para identificar qué vías son las que cumplen con este
-# supuesto de independencia del análisis de impacto.
+#' ============================================================================ #
+#' ==== AUTOMATE IMPACT ANALYSIS FOR TOPOLOGICAL-BASED ENRICHMENT ANALYSIS ==== #
+#' ============================================================================ #
+#'
+#' Performs automated Signaling Pathway Impact Analysis (SPIA) to identify
+#' significantly impacted KEGG pathways using topology-aware enrichment analysis.
+#' Includes visualization, pathway mapping, and similarity analysis between pathways.
+#'
+#' @param dea_dataframe A data frame containing differential expression analysis results.
+#'                    Must contain logFC values and adjusted p-values.
+#' @param pval_adjust_colname Character string specifying the column name for adjusted p-values.
+#'                          Default is "FDR".
+#' @param keytype Character string specifying the gene identifier type in the input data.
+#'              Default is "ENTREZID".
+#' @param gene_column Character string specifying the column name containing gene identifiers.
+#'                  Default is "ENTREZID".
+#' @param where_to_save Character string specifying the directory path for saving results.
+#'                    If NULL, uses current working directory. Default is NULL.
+#' @param title Character string used for naming output files and directories.
+#'            Default is "Topology_Based_Enrichment_Analysis".
+#' @param org Character string specifying the organism. Options: "mmu" (mouse) or "hsa" (human).
+#'          Default is "mmu".
+#' @param significance Numeric value specifying the significance threshold for adjusted p-values.
+#'                   Default is 0.05.
+#' @param kegg_db_path Character string specifying the path to pre-existing KEGG database CSV file.
+#'                   Default is NULL.
+#' @param new_pathway_txt Logical indicating whether to create a new KEGG pathway database from text file.
+#'                      Default is FALSE.
+#' @param path_txt Character string specifying the path to KEGG pathway text file when new_pathway_txt = TRUE.
+#'               Default is NULL.
+#'
+#' @return Invisible NULL. The function generates:
+#'   - SPIA results in Excel format
+#'   - Two-way evidence plot
+#'   - Pathview pathway visualizations
+#'   - Jaccard index dendrogram for significant pathways
+#'   - Processed data files in organized directory structure
+#'
+#' @details
+#' This function performs the following steps:
+#' \enumerate{
+#'   \item Loads required packages and sets up directory structure
+#'   \item Converts gene identifiers to ENTREZID if necessary
+#'   \item Runs SPIA analysis using pathway topology
+#'   \item Generates visualizations (evidence plot, pathway maps)
+#'   \item Calculates Jaccard similarity between significant pathways
+#'   \item Creates hierarchical clustering dendrogram of pathways
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' # Basic usage with mouse data
+#' SPIA_automatic_enrichment(dea_dataframe = my_deg_results, 
+#'                          org = "mmu")
+#'
+#' # Human data with custom parameters
+#' SPIA_automatic_enrichment(dea_dataframe = human_deg_results,
+#'                          org = "hsa",
+#'                          significance = 0.01,
+#'                          title = "My_SPIA_Analysis")
+#' }
+#'
+#' @export
+#' @importFrom openxlsx write.xlsx
+#' @importFrom dplyr filter mutate select left_join group_by summarise
+#' @importFrom tidyr separate_rows
+#' @importFrom SPIA spia plotP
+#' @importFrom pathview pathview
+#' @importFrom vegan vegdist
+#' @importFrom stats hclust dist
+#' @importFrom AnnotationDbi mapIds
+#' @importFrom org.Mm.eg.db org.Mm.eg.db
+#' @importFrom org.Hs.eg.db org.Hs.eg.db
 SPIA_automatic_enrichment <- function(dea_dataframe,
                                       pval_adjust_colname = "FDR",
                                       keytype = "ENTREZID",

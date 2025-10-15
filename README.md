@@ -14,18 +14,18 @@ The goal is to provide a **reproducible, automated and modular** workflow, organ
   │ └── 03_Alig_Quant_RSEM_STAR_v4.sh
   |
   │── Differential Expression Analysis/ # Script en R para análisis de expresión diferencial 
-  │ ├── Differential_Expression_Analysis_Limma_voom_v4.R
-  | ├── Differencial_Expression_Analysis_EdgeR_QL_v3.R
-  | ├── QC_Count_Matrix_RNAseq_v6.R
-  │ └── full_rnaseq_automate_analysis_v4.R
+  │ ├── Differential_Expression_Analysis_Limma_voom.R
+  | ├── Differencial_Expression_Analysis_EdgeR_QL.R
+  | ├── QC_Count_Matrix_RNAseq.R
+  │ └── full_rnaseq_automate_analysis.R
   |
   │── Downstream Analysis/ # Scripts en R para análisis biológico 
   | ├── CIBERSORT.R
-  | ├── cibersort_automatic_function_V1.R
+  | ├── cibersort_automatic_function.R
   │ ├── crear_kegg_database_V1.R
-  │ ├── enrichment_analysis_v4.R 
-  │ ├── volcano_gsea_v1.R
-  │ └── spia_topology_based_enrichment_analysis_V1.R
+  │ ├── enrichment_analysis.R 
+  │ ├── volcano_gsea.R
+  │ └── spia_topology_based_enrichment_analysis.R
   |
   └── README.md 
   ``` </pre>

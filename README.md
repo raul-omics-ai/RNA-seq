@@ -41,7 +41,7 @@ Includes steps for
 ---
 
 ## 📊 Differential Expression Analysis
-R Script (`full_rnaseq_automate_analysis_v4.R`) that:
+R Script (`full_rnaseq_automate_analysis.R`) that:
 - Evaluates count matrix quality  
 - Detects outliers and problematic samples  
 - Runs differential expression analysis (edgeR, limma-voom)  

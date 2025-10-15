@@ -1,9 +1,93 @@
 ########## 12/11/2024 ##########
 
-# This scripts will be focus in the enrichment analysis with GO terms, KEGG, MSigDB, Wikipathways and GSEA analysis. I will explore also some
-# visualizations.
-
-# For enrichment analysis, only can take care of genes with SYMBOL, so all those ENSEMBL IDs without SYMBOL,  won't be taken into consideration
+#' Comprehensive Gene Set Enrichment Analysis
+#'
+#' Performs comprehensive enrichment analysis including GO, KEGG, and WikiPathways
+#' analyses using both over-representation analysis (ORA) and gene set enrichment 
+#' analysis (GSEA) methods. Generates extensive visualizations and Excel reports.
+#'
+#' @param dge_df A data frame containing differential expression analysis results.
+#'              Must contain gene symbols, log fold changes, and adjusted p-values.
+#' @param symbol_colname Character string specifying the column name for gene symbols.
+#'                     Default is 'Symbol'.
+#' @param logfc_colname Character string specifying the column name for log fold changes.
+#'                    Default is 'logFC'.
+#' @param adj_p_val_colname Character string specifying the column name for adjusted p-values.
+#'                        Default is "adj.P.Val".
+#' @param where_to_save Character string specifying the directory path for saving results.
+#'                    If NULL, uses current working directory. Default is NULL.
+#' @param title Character string used for naming output files and directories.
+#'            Default is "Enrichment_analysis".
+#' @param organism Character string specifying the organism. Options: "mmu" (mouse) or "hsa" (human).
+#'               Default is 'mmu'.
+#' @param ontologies Character vector specifying Gene Ontology domains to analyze.
+#'                 Options: "BP" (Biological Process), "CC" (Cellular Component), 
+#'                 "MF" (Molecular Function). Default is c("BP", "CC", "MF").
+#' @param kegg Logical indicating whether to perform KEGG pathway analysis.
+#'           Default is TRUE.
+#' @param wikip Logical indicating whether to perform WikiPathways analysis.
+#'            Default is TRUE.
+#' @param kegg_pathview Logical indicating whether to generate KEGG pathway maps using pathview.
+#'                    Default is FALSE.
+#' @param universe Logical indicating whether to use background genes for enrichment analysis.
+#'               If TRUE, uses all genes in dge_df as universe. Default is TRUE.
+#'
+#' @return Invisible NULL. The function generates:
+#'   - Excel report with all enrichment results
+#'   - Multiple visualization plots for each ontology and database
+#'   - GSEA enrichment plots for top pathways
+#'   - Organized directory structure with results
+#'
+#' @details
+#' This function performs comprehensive enrichment analysis through the following steps:
+#' \enumerate{
+#'   \item Data preprocessing and filtering of significant genes
+#'   \item Gene identifier conversion to ENTREZID
+#'   \item GO enrichment analysis (ORA) for specified ontologies
+#'   \item GO GSEA analysis for specified ontologies
+#'   \item KEGG pathway GSEA analysis
+#'   \item WikiPathways GSEA analysis
+#'   \item Generation of multiple visualization types for each analysis
+#'   \item Creation of comprehensive Excel report
+#' }
+#'
+#' For each ontology and database, the function generates:
+#' - Enrichment maps (clustered terms)
+#' - Barplots and dotplots of enriched terms
+#' - Volcano plots for GSEA results
+#' - Combined summary plots
+#' - Individual GSEA plots for top pathways
+#'
+#' @examples
+#' \dontrun{
+#' # Basic usage with default parameters
+#' enrichment_function(dge_df = my_deg_results)
+#'
+#' # Custom analysis with specific ontologies and KEGG pathview
+#' enrichment_function(dge_df = deg_data,
+#'                    ontologies = c("BP", "MF"),
+#'                    organism = "hsa",
+#'                    kegg_pathview = TRUE,
+#'                    title = "My_Enrichment_Analysis")
+#'
+#' # Analysis without background genes
+#' enrichment_function(dge_df = deg_data,
+#'                    universe = FALSE,
+#'                    kegg = TRUE,
+#'                    wikip = FALSE)
+#' }
+#'
+#' @export
+#' @importFrom openxlsx createWorkbook addWorksheet writeDataTable writeData saveWorkbook
+#' @importFrom dplyr %>% arrange filter
+#' @importFrom clusterProfiler enrichGO gseGO gseKEGG gseWP pairwise_termsim setReadable
+#' @importFrom enrichplot emapplot barplot dotplot gseaplot2
+#' @importFrom ggplot2 ggplot geom_col aes coord_flip labs theme element_text
+#' @importFrom patchwork plot_annotation
+#' @importFrom AnnotationDbi mapIds
+#' @importFrom org.Mm.eg.db org.Mm.eg.db
+#' @importFrom org.Hs.eg.db org.Hs.eg.db
+#' @importFrom stats na.omit
 enrichment_function <- function(dge_df, 
                                 symbol_colname = 'Symbol', 
                                 logfc_colname = 'logFC', 

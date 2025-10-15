@@ -47,8 +47,8 @@ full_rnaseq_automate_analysis <- function(count_matrix,
   source("~/Documentos/09_scripts_R/QC_Count_Matrix_RNAseq_v6.R")
   source("~/Documentos/09_scripts_R/Differential_Expression_Analysis_Limma_voom_v4.R")
   source("~/Documentos/09_scripts_R/Differential_Expression_Analysis_EdgeR_QL_v3.R")
-  source("~/Documentos/09_scripts_R/enrichment_analysis_v4.R")
-  source("~/Documentos/09_scripts_R/spia_topology_based_enrichment_analysis_V1.R")
+  source("~/Documentos/09_scripts_R/enrichment_analysis_v5.R")
+  source("~/Documentos/09_scripts_R/spia_topology_based_enrichment_analysis_V2.R")
   
   print_centered_note(toupper("Setting up working directory "))
   where_to_save <- ifelse(is.null(where_to_save), getwd(), where_to_save)

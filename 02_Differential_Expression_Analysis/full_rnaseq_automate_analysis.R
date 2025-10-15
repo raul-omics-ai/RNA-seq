@@ -44,9 +44,9 @@ full_rnaseq_automate_analysis <- function(count_matrix,
   source("~/Documentos/09_scripts_R/print_centered_note_v1.R")
   source("~/Documentos/09_scripts_R/Automate_Saving_ggplots.R")
   source("~/Documentos/09_scripts_R/create_sequential_dir.R")
-  source("~/Documentos/09_scripts_R/QC_Count_Matrix_RNAseq_v6.R")
-  source("~/Documentos/09_scripts_R/Differential_Expression_Analysis_Limma_voom_v4.R")
-  source("~/Documentos/09_scripts_R/Differential_Expression_Analysis_EdgeR_QL_v3.R")
+  source("~/Documentos/09_scripts_R/QC_Count_Matrix_RNAseq.R")
+  source("~/Documentos/09_scripts_R/Differential_Expression_Analysis_Limma_voom.R")
+  source("~/Documentos/09_scripts_R/Differential_Expression_Analysis_EdgeR_QL.R")
   source("~/Documentos/09_scripts_R/enrichment_analysis.R")
   source("~/Documentos/09_scripts_R/spia_topology_based_enrichment_analysis.R")
   

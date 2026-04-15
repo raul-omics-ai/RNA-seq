@@ -95,7 +95,7 @@ for f in "$INPUT_DIR"/*.fastq.gz; do
         echo "[DRY-RUN] mv \"$f\" \"$INPUT_DIR/$new_name\""
     else
         mv "$f" "$INPUT_DIR/$new_name"
-        echo "✅ $base → $new_name"
+        echo "$base → $new_name"
     fi
 done
 

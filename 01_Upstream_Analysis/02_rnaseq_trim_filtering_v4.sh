@@ -17,7 +17,7 @@ THREADS=16                       # Número de hilos a utilizar (por defecto, tod
 
 # Función de uso para mostrar cómo utilizar el script
 usage() {
-    echo "Uso: $0 -i <directorio_de_entrada> -o <directorio_de_salida> -p <tipo_de_archivo> [-f CUT_FRONT] [-t CUT_TAIL] [-m CUT_MEAN_QUALITY] [-l MIN_LENGTH] [-h THREADS]"
+    echo "Uso: $0 -i <directorio_de_entrada> -o <directorio_de_salida> -p <tipo_de_archivo> [-f CUT_FRONT] [-t CUT_TAIL] [-m CUT_MEAN_QUALITY] [-l MIN_LENGTH] [-t THREADS]"
     echo "  -i: Directorio de entrada donde se encuentran los archivos .fastq"
     echo "  -o: Directorio de salida donde se generarán los reportes"
     echo "  -p: Tipo de archivo: 'paired' para paired-end o 'single' para single-end"
@@ -25,12 +25,12 @@ usage() {
     echo "  -t: PhredScore mínimo para cortar por el extremo 3'"
     echo "  -m: Cortar según el valor de calidad Phred medio"
     echo "  -l: Longitud mínima de las lecturas"
-    echo "  -h: (Opcional) Número de hilos a usar. Por defecto 16"
+    echo "  -t: (Opcional) Número de hilos a usar. Por defecto 16"
     exit 1
 }
 
 # Parsear las opciones utilizando getopts
-while getopts ":i:o:p:f:t:m:l:h:" opt; do
+while getopts ":i:o:p:f:t:m:l:t:" opt; do
     case ${opt} in
         i) input_dir="$OPTARG" ;;
         o) output_dir="$OPTARG" ;;
@@ -39,7 +39,7 @@ while getopts ":i:o:p:f:t:m:l:h:" opt; do
         g) CUT_TAIL="$OPTARG" ;;
         m) CUT_MEAN_QUALITY="$OPTARG" ;;
         l) MIN_LENGTH="$OPTARG" ;;
-        h) THREADS="$OPTARG" ;;
+        t) THREADS="$OPTARG" ;;
         \?) echo "Opción inválida: -$OPTARG" >&2; usage ;;
         :) echo "La opción -$OPTARG requiere un argumento." >&2; usage ;;
     esac

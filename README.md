@@ -10,8 +10,9 @@ The goal is to provide a **reproducible, automated and modular** workflow, organ
   │ ├── 00_downloead_fastq_files_sra_v5.sh
   │ ├── 01_FASTQC_MULTIQUC_Quality_Control_Parallel_v3.sh
   │ ├── 02_rnaseq_trim_filtering_v4.sh
-  │ ├── cutadapt_batch_pe.sh
-  │ └── 03_Alig_Quant_RSEM_STAR_v4.sh
+  │ ├── 03_Alig_Quant_RSEM_STAR_v4.sh
+  │ ├── rename_fastq.sh
+  │ └── cutadapt_batch_pe.sh
   |
   │── Differential Expression Analysis/ # Script en R para análisis de expresión diferencial 
   │ ├── Differential_Expression_Analysis_Limma_voom.R

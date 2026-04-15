@@ -37,7 +37,7 @@ Includes steps for
 - Quality control (FastQC, MultiQC)  
 - Adapter trimming and filtering (fastp, cutadapt)  
 - Mapping to a reference genome (RSEM + STAR)  
-- BONUS: Automatic download of public data from SRA (fasterq-dump)  
+- BONUS: Automatic download of public data from SRA (fasterq-dump)  whith automatic sample renaming.
 
 ---
 

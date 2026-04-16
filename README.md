@@ -7,7 +7,7 @@ The goal is to provide a **reproducible, automated and modular** workflow, organ
 <pre> ``` 
   RNA-seq-analysis/ 
   │── Upstream Analysis/ # Scripts en bash para preprocesamiento y mapeo 
-  │ ├── 00_downloead_fastq_files_sra_v5.sh
+  │ ├── 00_downloead_fastq_files_sra_v6.sh
   │ ├── 01_FASTQC_MULTIQUC_Quality_Control_Parallel_v3.sh
   │ ├── 02_rnaseq_trim_filtering_v4.sh
   │ ├── 03_Alig_Quant_RSEM_STAR_v4.sh

@@ -131,7 +131,6 @@ elif [ "$file_type" == "single" ]; then
             fastp -i "$SE_file" \
                   -o "$clean_fastq_dir/${base_name}_filtered.fastq.gz" \
                   --cut_front "$CUT_FRONT" \
-		  --adapter_sequence AGATCGGAAGAGCACACGTCTGAACTCCAGTCA \
                   --cut_tail "$CUT_TAIL" \
                   --cut_mean_quality "$CUT_MEAN_QUALITY" \
                   --trim_poly_g \

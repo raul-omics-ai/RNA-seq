@@ -1,0 +1,21 @@
+## Instructions to Generate Alignments Using Protein-Coding Genes
+
+1. Filter the original GTF file
+   From the complete annotation file (Mus_musculus.GRCm39.112.gtf), generate a new file containing only protein-coding genes.
+
+   Command:
+   grep 'gene_biotype "protein_coding"' Mus_musculus.GRCm39.112.gtf > Mus_musculus.GRCm39.112_only_protein_coding.gtf
+
+2. Prepare the filtered GTF file
+   The resulting file (Mus_musculus.GRCm39.112_only_protein_coding.gtf) contains only annotations corresponding to protein-coding genes.
+
+3. Index the reference genome
+   Use the filtered GTF file to index the reference genome with your aligner of choice (e.g., STAR, HISAT2).
+
+4. Align the samples
+   After indexing the genome:
+   - Re-run the alignment for all samples using the new index.
+   - This ensures that only protein-coding genes are considered.
+
+5. Store the results
+   Save the resulting alignment files in the corresponding directory. These will contain alignments restricted to protein-coding genes.

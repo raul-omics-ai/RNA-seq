@@ -5,15 +5,20 @@ set -euo pipefail
 #############################################
 # Script: rename_fastq.sh
 # Description:
-#   Renames FASTQ files of the form:
-#   sample_1.fastq.gz / sample_2.fastq.gz
-#   to:
-#   sample_R1_001.fastq.gz / sample_R2_001.fastq.gz
+#   Renames FASTQ files:
+#   Paired-end:
+#     sample_1.fastq.gz / sample_2.fastq.gz
+#     → sample_R1_001.fastq.gz / sample_R2_001.fastq.gz
+#
+#   Single-end (optional mode):
+#     sample.fastq.gz OR sample_1.fastq.gz
+#     → sample_R1_001.fastq.gz
 #############################################
 
 # Default values
 INPUT_DIR=""
 DRY_RUN=false
+SINGLE_END=false
 
 usage() {
     cat <<EOF
@@ -22,10 +27,12 @@ Usage: $(basename "$0") -i <directory> [options]
 Options:
   -i DIR    Directory containing FASTQ files (required)
   -n        Dry-run: show changes without renaming files
+  -s        Single-end mode
   -h        Show this help message and exit
 
 Examples:
   $(basename "$0") -i ./fastq_files
+  $(basename "$0") -i ./fastq_files -s
   $(basename "$0") -i /data/reads -n
 EOF
 }
@@ -33,14 +40,11 @@ EOF
 # -----------------------
 # Argument parsing
 # -----------------------
-while getopts ":i:nh" opt; do
+while getopts ":i:nsh" opt; do
     case $opt in
-        i)
-            INPUT_DIR="$OPTARG"
-            ;;
-        n)
-            DRY_RUN=true
-            ;;
+        i) INPUT_DIR="$OPTARG" ;;
+        n) DRY_RUN=true ;;
+        s) SINGLE_END=true ;;
         h)
             usage
             exit 0
@@ -80,23 +84,37 @@ shopt -s nullglob
 for f in "$INPUT_DIR"/*.fastq.gz; do
     base=$(basename "$f")
 
-    if [[ "$base" =~ _1\.fastq\.gz$ ]]; then
-        sample="${base/_1.fastq.gz/}"
-        new_name="${sample}_R1_001.fastq.gz"
-    elif [[ "$base" =~ _2\.fastq\.gz$ ]]; then
-        sample="${base/_2.fastq.gz/}"
-        new_name="${sample}_R2_001.fastq.gz"
+    if [[ "$SINGLE_END" == true ]]; then
+        # SINGLE-END MODE
+        if [[ "$base" =~ \.fastq\.gz$ ]]; then
+            sample="${base/.fastq.gz/}"
+            sample="${sample/_1/}"  # remove _1 if present
+            new_name="${sample}_R1_001.fastq.gz"
+        else
+            echo "⚠️  Skipping unrecognized file: $base"
+            continue
+        fi
+
     else
-        echo "⚠️  Skipping unrecognized file: $base"
-        continue
+        # PAIRED-END MODE (default)
+        if [[ "$base" =~ _1\.fastq\.gz$ ]]; then
+            sample="${base/_1.fastq.gz/}"
+            new_name="${sample}_R1_001.fastq.gz"
+        elif [[ "$base" =~ _2\.fastq\.gz$ ]]; then
+            sample="${base/_2.fastq.gz/}"
+            new_name="${sample}_R2_001.fastq.gz"
+        else
+            echo "⚠️  Skipping unrecognized file: $base"
+            continue
+        fi
     fi
 
     if [[ "$DRY_RUN" == true ]]; then
         echo "[DRY-RUN] mv \"$f\" \"$INPUT_DIR/$new_name\""
     else
         mv "$f" "$INPUT_DIR/$new_name"
-        echo "$base → $new_name"
+        echo "✅ $base → $new_name"
     fi
 done
 
-echo " Process completed."
+echo "✅ Process completed."

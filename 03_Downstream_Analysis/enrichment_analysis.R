@@ -103,6 +103,7 @@ enrichment_function <- function(dge_df,
   ########## loading packages and custom funcitons ##########
   source("~/Documentos/09_scripts_R/print_centered_note_v1.R")
   source("~/Documentos/09_scripts_R/Automate_Saving_ggplots.R")
+  source("~/Documentos/09_scripts_R/create_sequential_dir.R")
   print_centered_note('LOADING PACKAGES ')
   list_of_packages = c("openxlsx", "limma", "edgeR", "dplyr", "AnnotationDbi", "clusterProfiler",
                        "KEGG.db", "enrichplot", "graphics", "patchwork", "ggnewscale", "fgsea", 
@@ -127,10 +128,7 @@ enrichment_function <- function(dge_df,
   
   ########## Configuración del directorio de salida ##########
   where_to_save <- ifelse(is.null(where_to_save), getwd(), where_to_save)
-  output_dir <- file.path(where_to_save, title)
-  if (!dir.exists(output_dir)) {
-    dir.create(output_dir, recursive = TRUE)
-  }
+  output_dir <- create_sequential_dir(path = where_to_save, name = title)
   
   ########## step 0:check if there are NAs ##########
   print("Removing those rows without SYMBOL")
@@ -409,8 +407,9 @@ enrichment_function <- function(dge_df,
       print("Saving TOP 10 Upregulated and Downregulated pathways NES from GO-GSEA")
       for(path in 1:nrow(top_paths)){
         print(paste0("Saving GSEA plot for ", top_paths$Description[path], " GO term"))
-        png(file.path(output_dir, paste0("02_GSEA_plots/GSEAPLOT_",top_paths$Description[path] ,"_GO_", ontology,  ".png")), res = 300, width = 4000, height = 2000)
-        print(gseaplot2(gse, geneSetID = top_paths$ID[path], title = top_paths$Description[path], pvalue_table = T))
+        safe_name <-make.names(top_paths$Description[path])
+        png(file.path(output_dir, paste0("02_GSEA_plots/GSEAPLOT_",safe_name ,"_GO_", ontology,  ".png")), res = 300, width = 4000, height = 2000)
+        print(gseaplot2(gse, geneSetID = top_paths$ID[path], title = safe_name, pvalue_table = T))
         dev.off()
       } # Foor loop key for generate GSEA plots
     } # If key for GSE visualizations
